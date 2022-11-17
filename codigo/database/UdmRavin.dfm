@@ -5,18 +5,18 @@ object dmRavin: TdmRavin
   Width = 603
   object cnxBancoDeDados: TFDConnection
     Params.Strings = (
-      'Database=ravin'
-      'User_Name=root'
-      'Server=localhost'
-      'Password=132600'
-      'DriverID=MySQL')
+      'Server='
+      'Port='
+      'DriverID=MySQL'
+      'User_Name=root')
     UpdateOptions.AssignedValues = [uvUpdateMode]
-    Connected = True
+    AfterConnect = cnxBancoDeDadosAfterConnect
+    BeforeConnect = cnxBancoDeDadosBeforeConnect
     Left = 40
     Top = 24
   end
   object drvBancoDeDados: TFDPhysMySQLDriverLink
-    VendorLib = 'C:\projects\ravin\bibliotecas\libmysql.dll'
+    VendorLib = 'C:\Users\bcmsilva\Documents\ravin\projeto\libmysql.dll'
     Left = 40
     Top = 80
   end
