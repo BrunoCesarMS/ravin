@@ -1,15 +1,11 @@
-unit UfrmSplash;
-
+﻿unit UfrmSplash;
 interface
-
 uses
   Winapi.Windows,
   Winapi.Messages,
-
   System.SysUtils,
   System.Variants,
   System.Classes,
-
   Vcl.Graphics,
   Vcl.Controls,
   Vcl.Forms,
@@ -17,9 +13,7 @@ uses
   Vcl.ExtCtrls,
   Vcl.Imaging.pngimage,
   Vcl.StdCtrls,
-
   UfrmLogomarca;
-
 type
   TfrmSplash = class(TForm)
     pnlFundo: TPanel;
@@ -30,65 +24,81 @@ type
     procedure FormPaint(Sender: TObject);
   private
     { Private declarations }
-    Inicialized: Boolean;
-    procedure InicializeApplication();
-    procedure SetMainForm(NewMainForm: TForm);
+    Inicializado: Boolean;
+    procedure InicializarAplicacao();
+    procedure ShowPainelGestao();
+    procedure ShowLogin;
+    procedure SetarFormPrincipal(PNovoFormulario: TForm);
   public
     { Public declarations }
   end;
-
 var
   frmSplash: TfrmSplash;
-
 implementation
-
 {$R *.dfm}
-
-uses UfrmPainelGestao;
-
+uses UfrmPainelGestao, UfrmAutenticar, UiniUtils;
 procedure TfrmSplash.FormCreate(Sender: TObject);
 begin
-  Inicialized := false;
+  Inicializado := false;
   tmrSplash.Enabled := false;
   tmrSplash.Interval := 1000;
 end;
-
 procedure TfrmSplash.FormPaint(Sender: TObject);
 begin
-  tmrSplash.Enabled := not Inicialized;
+  tmrSplash.Enabled := not Inicializado;
+end;
+procedure TfrmSplash.InicializarAplicacao;
+var
+LLogado: string;
+begin
+  LLogado :=    TIniUtils.lerPropriedade(TSECAO.INFORMACOES_GERAIS,
+  TPROPRIEDADE.LOGADO);
+  if LLogado = TIniUtils.VALOR_VERDADEIRO then
+  begin
+    ShowPainelGestao();
+  end
+  else
+  begin
+    ShowLogin();
+  end;
+end;
+procedure TfrmSplash.tmrSplashTimer(Sender: TObject);
+begin
+  tmrSplash.Enabled := false;
+  if not Inicializado then
+  begin
+    Inicializado := true;
+    InicializarAplicacao();
+  end;
+end;
+procedure TfrmSplash.SetarFormPrincipal(PNovoFormulario: TForm);
+var
+  tmpMain: ^TCustomForm;
+begin
+  tmpMain := @Application.Mainform;
+  tmpMain^ := PNovoFormulario;
+end;
+procedure TfrmSplash.ShowLogin;
+begin
+  if not Assigned(frmAutenticar) then
+  begin
+    Application.CreateForm(TfrmAutenticar, frmAutenticar);
+  end;
+  SetarFormPrincipal(frmAutenticar);
+  frmAutenticar.Show();
+  Close;
 end;
 
-procedure TfrmSplash.InicializeApplication;
+procedure TfrmSplash.ShowPainelGestao;
 begin
   if not Assigned(frmPainelGestao) then
   begin
     Application.CreateForm(TfrmPainelGestao, frmPainelGestao);
   end;
-
-  SetMainForm(frmPainelGestao);
+  SetarFormPrincipal(frmPainelGestao);
   frmPainelGestao.Show();
-
   Close;
 end;
 
-procedure TfrmSplash.tmrSplashTimer(Sender: TObject);
-begin
-  tmrSplash.Enabled := false;
-  if not Inicialized then
-  begin
-    Inicialized := true;
-    InicializeApplication();
-  end;
-end;
-
-procedure TfrmSplash.SetMainForm(NewMainForm: TForm);
-var
-  tmpMain: ^TCustomForm;
-begin
-  tmpMain := @Application.Mainform;
-  tmpMain^ := NewMainForm;
-end;
-
 end.
-
 

@@ -8,13 +8,14 @@ uses
   FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.MySQL,
   FireDAC.Phys.MySQLDef, FireDAC.VCLUI.Wait, Data.DB, FireDAC.Comp.Client,
   FireDAC.Comp.UI, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf,
-  FireDAC.DApt, FireDAC.Comp.DataSet, vcl.Dialogs;
+  FireDAC.DApt, FireDAC.Comp.DataSet, Vcl.Dialogs;
 
 type
   TdmRavin = class(TDataModule)
     cnxBancoDeDados: TFDConnection;
     drvBancoDeDados: TFDPhysMySQLDriverLink;
     wtcBancoDeDados: TFDGUIxWaitCursor;
+    FDQuery1: TFDQuery;
     procedure DataModuleCreate(Sender: TObject);
     procedure cnxBancoDeDadosBeforeConnect(Sender: TObject);
     procedure cnxBancoDeDadosAfterConnect(Sender: TObject);
@@ -31,20 +32,21 @@ var
 
 implementation
 
-uses UresourcesUtils;
+uses UresourceUtils;
 
 {%CLASSGROUP 'Vcl.Controls.TControl'}
-
 {$R *.dfm}
 
 procedure TdmRavin.cnxBancoDeDadosAfterConnect(Sender: TObject);
 var
-  LCriarBaseDados: boolean;
-  LCaminhoBaseDados : string;
+  LCaminhoBaseDados: String;
+  LCriarBaseDados: Boolean;
 begin
-  LCaminhoBaseDados := 'C:\ProgramData\MySQL\MySQL Server 8.0\Data\ravin\pessoa.ibd';
+  LCaminhoBaseDados := 'C:\ProgramData\MySQL' +
+    '\MySQL Server 8.0\Data\ravin\pessoa.ibd';
   LCriarBaseDados := not FileExists(LCaminhoBaseDados, true);
-  if LCriarBaseDados then
+
+  If LCriarBaseDados then
   begin
     CriarTabelas();
     InserirDados();
@@ -53,11 +55,11 @@ end;
 
 procedure TdmRavin.cnxBancoDeDadosBeforeConnect(Sender: TObject);
 var
-  LCriarBaseDados : Boolean;
-  LCaminhoBaseDados : string;
-
+  LCaminhoBaseDados: String;
+  LCriarBaseDados: Boolean;
 begin
-  LCaminhoBaseDados := 'C:\ProgramData\MySQL\MySQL Server 8.0\Data\ravin\pessoa.ibd';
+  LCaminhoBaseDados := 'C:\ProgramData\MySQL' +
+    '\MySQL Server 8.0\Data\ravin\pessoa.ibd';
   LCriarBaseDados := not FileExists(LCaminhoBaseDados, true);
   with cnxBancoDeDados do
   begin
@@ -74,39 +76,39 @@ begin
   end;
 end;
 
-procedure TdmRavin.DataModuleCreate(Sender: TObject);
-begin
-  if not cnxBancoDeDados.Connected then
-  begin
-    cnxBancoDeDados.Connected := true;
-  end;
-
-end;
-
 procedure TdmRavin.CriarTabelas;
 begin
   try
-    cnxBancoDeDados.ExecSQL(TResourceUtils.carregararquivoresource(
-    'createTable.sql','ravinscripts'));
+    cnxBancoDeDados.ExecSQL(TResourceUtils
+    .carregarArquivoResource
+      ('createTables.sql', 'ravin'));
   except
     on E: Exception do
       ShowMessage(E.Message);
   end;
 end;
-
 procedure TdmRavin.InserirDados;
 begin
   try
     cnxBancoDeDados.StartTransaction();
-    cnxBancoDeDados.ExecSQL(TResourceUtils.carregararquivoresource(
-    'inserts.sql','ravinscripts'));
+    cnxBancoDeDados.ExecSQL(TResourceUtils
+    .carregarArquivoResource
+      ('insertValues.sql', 'ravin'));
     cnxBancoDeDados.Commit();
   except
     on E: Exception do
     begin
-      cnxBancoDeDados.Rollback;
-      ShowMessage(E.Message)
+      cnxBancoDeDados.Rollback();
+      ShowMessage(E.Message);
     end;
+  end;
+end;
+
+procedure TdmRavin.DataModuleCreate(Sender: TObject);
+begin
+  if not cnxBancoDeDados.Connected then
+  begin
+    cnxBancoDeDados.Connected := true;
   end;
 end;
 

@@ -7,8 +7,7 @@ object dmRavin: TdmRavin
     Params.Strings = (
       'Server='
       'Port='
-      'DriverID=MySQL'
-      'User_Name=root')
+      'DriverID=MySQL')
     UpdateOptions.AssignedValues = [uvUpdateMode]
     AfterConnect = cnxBancoDeDadosAfterConnect
     BeforeConnect = cnxBancoDeDadosBeforeConnect
@@ -24,5 +23,10 @@ object dmRavin: TdmRavin
     Provider = 'Forms'
     Left = 40
     Top = 136
+  end
+  object FDQuery1: TFDQuery
+    Connection = cnxBancoDeDados
+    Left = 408
+    Top = 48
   end
 end

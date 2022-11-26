@@ -1,5 +1,4 @@
 program Ravin;
-
 uses
   Vcl.Forms,
   UfrmCartaoPainelGestao in '..\codigo\frames\UfrmCartaoPainelGestao.pas' {frmCartaoPainelControle: TFrame},
@@ -12,15 +11,26 @@ uses
   UfrmProdutos in '..\codigo\formularios\UfrmProdutos.pas' {frmProdutos},
   UfrmPainelGestao in '..\codigo\formularios\UfrmPainelGestao.pas' {frmPainelGestao},
   UfrmComandas in '..\codigo\formularios\UfrmComandas.pas' {frmComandas},
-  UresourcesUtils in '..\codigo\UresourcesUtils.pas';
+  UresourceUtils in '..\codigo\util\UresourceUtils.pas',
+  Uusuario in '..\codigo\modelos\Uusuario.pas',
+  UusuarioDao in '..\codigo\dao\UusuarioDao.pas',
+  UfrmBotaoPrimario in '..\codigo\frames\UfrmBotaoPrimario.pas' {frmBotaoPrimario: TFrame},
+  UfrmBotaoSecundario in '..\codigo\frames\UfrmBotaoSecundario.pas' {frmBotaoSecundario: TFrame},
+  UfrmAutenticar in '..\codigo\formularios\UfrmAutenticar.pas' {frmAutenticar},
+  UfrmRegistrar in '..\codigo\formularios\UfrmRegistrar.pas' {frmRegistrar},
+  UvalidadorUsuario in '..\codigo\UvalidadorUsuario.pas',
+  UiniUtils in '..\codigo\util\UiniUtils.pas',
+  UUsuarios in '..\codigo\formularios\UUsuarios.pas' {frmUsuarios};
 
 {$R *.res}
-
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := False;
   ReportMemoryLeaksOnShutdown := True;
   Application.CreateForm(TdmRavin, dmRavin);
   Application.CreateForm(TfrmSplash, frmSplash);
+  Application.CreateForm(TfrmAutenticar, frmAutenticar);
+  Application.CreateForm(TfrmRegistrar, frmRegistrar);
+  Application.CreateForm(TfrmUsuarios, frmUsuarios);
   Application.Run;
 end.
