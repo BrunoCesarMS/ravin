@@ -20,7 +20,8 @@ uses
   UfrmRegistrar in '..\codigo\formularios\UfrmRegistrar.pas' {frmRegistrar},
   UvalidadorUsuario in '..\codigo\UvalidadorUsuario.pas',
   UiniUtils in '..\codigo\util\UiniUtils.pas',
-  UUsuarios in '..\codigo\formularios\UUsuarios.pas' {frmUsuarios};
+  UUsuarios in '..\codigo\formularios\UUsuarios.pas' {frmUsuarios},
+  UFormUtilS in '..\codigo\util\UFormUtilS.pas';
 
 {$R *.res}
 begin

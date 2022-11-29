@@ -34,7 +34,7 @@ type
     procedure lblSubTituloRegistrasClick(Sender: TObject);
   private
     { Private declarations }
-    procedure SetMainForm(NovoMainForm: TForm);
+
   public
     { Public declarations }
   end;
@@ -46,7 +46,8 @@ implementation
 
 {$R *.dfm}
 
-uses UfrmPainelGestao, Uusuario, UusuarioDao, UfrmRegistrar, UiniUtils;
+uses UfrmPainelGestao, Uusuario, UusuarioDao, UfrmRegistrar, UiniUtils,
+  UFormUtilS;
 
 { TfrmLogin }
 
@@ -77,7 +78,7 @@ begin
         Application.CreateForm(TfrmPainelGestao, frmPainelGestao);
       end;
 
-      SetMainForm(frmPainelGestao);
+      TFormUtilS.SetarFormularioPrincipal(frmPainelGestao);
       frmPainelGestao.Show();
 
       Close;
@@ -94,7 +95,6 @@ begin
 
   FreeAndNil(LusuarioDAO);
   FreeAndNil(Lusuario);
-
 end;
 
 procedure TfrmAutenticar.lblSubTituloRegistrasClick(Sender: TObject);
@@ -104,18 +104,10 @@ begin
     Application.CreateForm(TfrmRegistrar, frmRegistrar);
   end;
 
-  SetMainForm(frmRegistrar);
+  TFormUtilS.SetarFormularioPrincipal(frmRegistrar);
   frmRegistrar.Show();
 
   Close();
-end;
-
-procedure TfrmAutenticar.SetMainForm(NovoMainForm: TForm);
-var
-  tmpMain: ^TCustomForm;
-begin
-  tmpMain := @Application.Mainform;
-  tmpMain^ := NovoMainForm;
 end;
 
 end.

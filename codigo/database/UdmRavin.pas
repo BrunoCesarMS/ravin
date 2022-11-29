@@ -32,7 +32,7 @@ var
 
 implementation
 
-uses UresourceUtils;
+uses UresourceUtils, UiniUtils;
 
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 {$R *.dfm}
@@ -42,8 +42,8 @@ var
   LCaminhoBaseDados: String;
   LCriarBaseDados: Boolean;
 begin
-  LCaminhoBaseDados := 'C:\ProgramData\MySQL' +
-    '\MySQL Server 8.0\Data\ravin\pessoa.ibd';
+  //setar a variável do caminho
+  LCaminhoBaseDados := TIniUtils.lerPropriedade(TSECAO.DATABASE,TPROPRIEDADE.CAMINHO_DB);
   LCriarBaseDados := not FileExists(LCaminhoBaseDados, true);
 
   If LCriarBaseDados then
@@ -58,20 +58,19 @@ var
   LCaminhoBaseDados: String;
   LCriarBaseDados: Boolean;
 begin
-  LCaminhoBaseDados := 'C:\ProgramData\MySQL' +
-    '\MySQL Server 8.0\Data\ravin\pessoa.ibd';
+  LCaminhoBaseDados := TIniUtils.lerPropriedade(TSECAO.DATABASE,TPROPRIEDADE.CAMINHO_DB);
   LCriarBaseDados := not FileExists(LCaminhoBaseDados, true);
   with cnxBancoDeDados do
   begin
-    Params.Values['Server'] := 'localhost';
-    Params.Values['User_Name'] := 'root';
-    Params.Values['Password'] := 'root';
-    Params.Values['DriverID'] := 'MySQL';
-    Params.Values['Port'] := '3306';
+    Params.Values['Server'] := TIniUtils.lerPropriedade(TSECAO.DATABASE,TPROPRIEDADE.SERVER);
+    Params.Values['User_Name'] := TIniUtils.lerPropriedade(TSECAO.DATABASE,TPROPRIEDADE.USERNAME);
+    Params.Values['Password'] := TIniUtils.lerPropriedade(TSECAO.DATABASE,TPROPRIEDADE.PASSWORD);
+    Params.Values['DriverID'] := TIniUtils.lerPropriedade(TSECAO.DATABASE,TPROPRIEDADE.DRIVER_ID);
+    Params.Values['Port'] := TIniUtils.lerPropriedade(TSECAO.DATABASE,TPROPRIEDADE.PORT);
 
     if not LCriarBaseDados then
     begin
-      Params.Values['Database'] := 'ravin';
+      Params.Values['Database'] := TIniUtils.lerPropriedade(TSECAO.DATABASE,TPROPRIEDADE.NOME_DB)
     end;
   end;
 end;
